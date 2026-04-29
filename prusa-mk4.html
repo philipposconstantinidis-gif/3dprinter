@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prusa MK4 Settings — Best Temperatures & Speeds for Every Filament</title>
+    <meta name="description" content="Recommended Prusa MK4 settings for PLA, PETG, ABS, TPU and more. Nozzle temperature, bed temperature, print speed, and retraction settings for every filament type.">
+    <meta name="keywords" content="prusa mk4 settings, prusa mk4s settings, prusa mk4 pla settings, prusa mk4 petg settings, prusa mk4 temperature, prusa 3d printer settings, prusa mk4 retraction settings, prusa mk4 cura settings, prusaslicer settings, prusa mk4 best settings">
+    <link rel="canonical" href="https://3dcheat.com/prusa-mk4.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0B0D11; --surface: #141720; --surface-2: #1C2030; --text: #E8E9ED;
+            --text-soft: #8B8FA3; --text-muted: #565B70; --accent: #6C5CE7;
+            --accent-glow: rgba(108,92,231,0.15); --green: #00D68F; --orange: #FDAC42;
+            --red: #FF6B6B; --border: #222638; --border-hover: #363C54;
+        }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(108,92,231,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(108,92,231,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+        nav, .page-hero, .settings-section, .info-section, footer { position: relative; z-index: 1; }
+
+        nav { max-width: 1100px; margin: 0 auto; padding: 24px 32px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        nav .brand { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        nav .brand .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
+        nav .nav-links { display: flex; gap: 28px; align-items: center; }
+        nav .nav-link { font-size: 13px; font-weight: 500; color: var(--text-soft); text-decoration: none; transition: color 0.15s; }
+        nav .nav-link:hover { color: var(--text); }
+        nav .nav-link.active { color: var(--accent); }
+
+        .page-hero { max-width: 1100px; margin: 0 auto; padding: 64px 32px 32px; }
+        .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--accent); }
+        .page-hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 12px; }
+        .page-hero h1 .accent { color: var(--accent); }
+        .page-subtitle { font-size: 16px; color: var(--text-soft); max-width: 640px; line-height: 1.7; margin-bottom: 20px; }
+        .printer-specs { display: flex; gap: 16px; flex-wrap: wrap; }
+        .spec-tag { font-size: 12px; font-weight: 600; padding: 7px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-soft); }
+
+        /* SETTINGS SECTION */
+        .settings-section { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+        .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .settings-header { padding: 24px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .settings-header h2 { font-size: 18px; font-weight: 700; }
+        .settings-header .slicer-note { font-size: 12px; color: var(--text-muted); }
+
+        .filament-tabs { display: flex; gap: 6px; padding: 20px 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+        .fil-tab {
+            padding: 10px 18px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-soft);
+            transition: all 0.15s;
+        }
+        .fil-tab:hover { border-color: var(--border-hover); color: var(--text); }
+        .fil-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+        .settings-grid { padding: 28px 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .setting-tile {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+        .setting-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .setting-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+        }
+        .setting-value .unit {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-left: 2px;
+        }
+        .setting-note {
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* INFO */
+        .info-section { max-width: 1100px; margin: 0 auto; padding: 32px 32px 64px; }
+        .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px; }
+        .info-card h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+        .info-card h3 { font-size: 16px; font-weight: 700; margin: 24px 0 8px; }
+        .info-card p { font-size: 14px; color: var(--text-soft); line-height: 1.75; margin-bottom: 12px; }
+
+        .faq-item summary { font-weight: 600; font-size: 14px; cursor: pointer; padding: 16px 0; list-style: none; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+        .faq-item[open] summary { border-bottom-color: var(--accent); }
+        .faq-item summary::-webkit-details-summary { display: none; }
+        .faq-item summary::before { content: '+'; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--surface-2); border: 1px solid var(--border); color: var(--accent); font-weight: 600; font-size: 14px; flex-shrink: 0; border-radius: 6px; }
+        .faq-item[open] summary::before { content: '−'; background: var(--accent); color: white; border-color: var(--accent); }
+        .faq-item .faq-answer { padding: 12px 0 16px 34px; color: var(--text-soft); font-size: 14px; line-height: 1.7; border-bottom: 1px solid var(--border); }
+
+        footer { max-width: 1100px; margin: 0 auto; padding: 32px; border-top: 1px solid var(--border); text-align: center; font-size: 12px; color: var(--text-muted); }
+        footer a { color: var(--text-muted); text-decoration: none; margin: 0 12px; }
+        footer a:hover { color: var(--accent); }
+
+        @media (max-width: 700px) {
+            .settings-grid { grid-template-columns: 1fr 1fr; }
+            .info-card { padding: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="brand"><span class="dot"></span> 3DCheat</a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Printers</a>
+        <a href="/about.html" class="nav-link">About</a>
+        <a href="/contact.html" class="nav-link">Contact</a>
+        <a href="/privacy.html" class="nav-link">Privacy</a>
+    </div>
+</nav>
+
+<section class="page-hero">
+    <div class="breadcrumb"><a href="/">Printers</a> → Prusa MK4</div>
+    <h1><span class="accent">Prusa MK4</span> settings for every filament</h1>
+    <p class="page-subtitle">Recommended settings for the Prusa MK4 / MK4S with a 0.4mm nozzle and Nextruder direct drive. Select your filament below.</p>
+    <div class="printer-specs">
+        <span class="spec-tag">Direct Drive</span>
+        <span class="spec-tag">Open Frame</span>
+        <span class="spec-tag">Nextruder</span>
+        <span class="spec-tag">Max 290°C Nozzle</span>
+        <span class="spec-tag">Max 120°C Bed</span>
+    </div>
+</section>
+
+<section class="settings-section">
+    <div class="settings-card">
+        <div class="settings-header">
+            <h2>Filament Settings</h2>
+            <span class="slicer-note">Works with Bambu Studio, OrcaSlicer, Cura</span>
+        </div>
+
+        <div class="filament-tabs" id="tabs">
+            <button class="fil-tab active" onclick="show('pla')">PLA</button>
+            <button class="fil-tab" onclick="show('plaplus')">PLA+</button>
+            <button class="fil-tab" onclick="show('petg')">PETG</button>
+            <button class="fil-tab" onclick="show('abs')">ABS</button>
+            <button class="fil-tab" onclick="show('tpu')">TPU</button>
+            <button class="fil-tab" onclick="show('asa')">ASA</button>
+            <button class="fil-tab" onclick="show('nylon')">Nylon</button>
+            <button class="fil-tab" onclick="show('wood')">Wood PLA</button>
+            <button class="fil-tab" onclick="show('silk')">Silk PLA</button>
+        </div>
+
+        <div class="settings-grid" id="grid"></div>
+    </div>
+</section>
+
+<section class="info-section">
+    <div class="info-card">
+        <h2>Prusa MK4 — Settings Guide</h2>
+        <p>The Bambu Lab A1 is a fast, reliable direct drive FDM printer that handles most filaments with minimal tuning. Its all-metal hotend reaches 300°C, supporting everything from PLA to basic Nylon. The direct drive extruder means short retraction distances (0.5-1.5mm) and excellent performance with flexible filaments like TPU.</p>
+
+        <h3>Key Things to Know</h3>
+        <p><strong>Speed:</strong> The MK4 supports input shaping for cleaner prints at higher speeds. Start at 60-80mm/s and increase once you're confident. The MK4S adds faster stepper drivers.</p>
+        <p><strong>Open frame:</strong> The MK4 is open-frame, so ABS needs an enclosure. Prusa sells the official enclosure, or build one from an IKEA LACK table.</p>
+        <p><strong>Retraction:</strong> Direct drive means very short retraction — typically 0.5-1.0mm. If you see stringing, increase by 0.2mm at a time. Don't go above 2mm or you risk heat creep and jams.</p>
+
+        <h2 style="margin-top:32px;">Frequently Asked Questions</h2>
+
+        <details class="faq-item">
+            <summary>What temperature should I print PLA on the Prusa MK4?</summary>
+            <div class="faq-answer">Start at 210°C nozzle and 55°C bed. Start at 215°C nozzle and 60°C bed with PrusaSlicer's built-in PLA profile. The Nextruder runs well at slightly higher temperatures.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>What retraction settings should I use on the MK4?</summary>
+            <div class="faq-answer">Start at 0.8mm retraction distance and 35mm/s speed. The Nextruder's direct drive path is very short, so minimal retraction works best. PrusaSlicer's defaults are well-tuned — only adjust if you see stringing.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Can the Prusa MK4 print ABS?</summary>
+            <div class="faq-answer">Yes, but you need an enclosure since the MK4 is open-frame. Use the official Prusa enclosure or a DIY solution. Set nozzle to 245°C, bed to 100°C, fan off. The MK4 handles ABS well once enclosed.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>What slicer should I use with the Prusa MK4?</summary>
+            <div class="faq-answer">PrusaSlicer is the recommended slicer — it has the best built-in profiles for the MK4 and is actively maintained by Prusa. OrcaSlicer is a good alternative. Cura works but requires manual profile setup.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Can the MK4 print TPU / flexible filament?</summary>
+            <div class="faq-answer">Yes — the Nextruder handles TPU excellently. Print at 220-230°C, 50°C bed, 25-30mm/s speed, with minimal retraction (0.3-0.5mm). The MK4 is one of the best printers for flexible filaments.</div>
+        </details>
+    </div>
+</section>
+
+<footer>
+    <div style="margin-bottom: 12px;">
+        <a href="/">Printers</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy</a>
+    </div>
+    &copy; 2026 3DCheat. Not affiliated with Prusa Research.
+</footer>
+
+<script>
+const DATA = {
+    pla:     { nozzle: '210', bed: '55', speed: '80', retract: '0.8', retractSpd: '30', fan: '100', layer: '0.20', flow: '98', notes: 'Great starting point. Increase nozzle 5°C if layer adhesion is poor.' },
+    plaplus: { nozzle: '215', bed: '60', speed: '80', retract: '0.8', retractSpd: '30', fan: '100', layer: '0.20', flow: '98', notes: 'Slightly higher temp than regular PLA for better layer bonding.' },
+    petg:    { nozzle: '235', bed: '80', speed: '60', retract: '1.0', retractSpd: '30', fan: '50',  layer: '0.20', flow: '100', notes: 'Some stringing is normal. Reduce fan to 30% for better layer adhesion.' },
+    abs:     { nozzle: '245', bed: '100', speed: '60', retract: '0.8', retractSpd: '30', fan: '0',   layer: '0.20', flow: '100', notes: 'Needs enclosure for best results. No fan. Print in warm room.' },
+    tpu:     { nozzle: '225', bed: '50', speed: '25', retract: '0.5', retractSpd: '25', fan: '50',  layer: '0.20', flow: '105', notes: 'Go slow. Direct drive handles TPU well. Minimal retraction.' },
+    asa:     { nozzle: '250', bed: '100', speed: '60', retract: '0.8', retractSpd: '30', fan: '0',   layer: '0.20', flow: '100', notes: 'Similar to ABS. Needs enclosure. Better UV resistance than ABS.' },
+    nylon:   { nozzle: '260', bed: '80', speed: '40', retract: '1.0', retractSpd: '25', fan: '0',   layer: '0.20', flow: '105', notes: 'Must dry filament first. Very hygroscopic. Enclosure recommended.' },
+    wood:    { nozzle: '200', bed: '55', speed: '40', retract: '0.8', retractSpd: '25', fan: '100', layer: '0.24', flow: '105', notes: 'Low temp to avoid burning wood fibres. Use 0.5mm+ nozzle ideally.' },
+    silk:    { nozzle: '215', bed: '55', speed: '50', retract: '0.8', retractSpd: '30', fan: '80',  layer: '0.20', flow: '100', notes: 'Slower for best sheen. Higher temp gives glossier finish.' }
+};
+
+function show(fil) {
+    document.querySelectorAll('.fil-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    const d = DATA[fil];
+    document.getElementById('grid').innerHTML = `
+        <div class="setting-tile"><div class="setting-label">Nozzle Temp</div><div class="setting-value">${d.nozzle}<span class="unit">°C</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Bed Temp</div><div class="setting-value">${d.bed}<span class="unit">°C</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Print Speed</div><div class="setting-value">${d.speed}<span class="unit">mm/s</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Retraction Dist</div><div class="setting-value">${d.retract}<span class="unit">mm</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Retraction Speed</div><div class="setting-value">${d.retractSpd}<span class="unit">mm/s</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Fan Speed</div><div class="setting-value">${d.fan}<span class="unit">%</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Layer Height</div><div class="setting-value">${d.layer}<span class="unit">mm</span></div></div>
+        <div class="setting-tile"><div class="setting-label">Flow Rate</div><div class="setting-value">${d.flow}<span class="unit">%</span></div></div>
+        <div style="grid-column: 1/-1; padding: 14px 18px; background: var(--accent-glow); border: 1px solid rgba(108,92,231,0.25); border-radius: 8px; font-size: 13px; color: var(--text-soft);">
+            <strong style="color: var(--accent);">Tip:</strong> ${d.notes}
+        </div>
+    `;
+}
+show('pla');
+</script>
+
+</body>
+</html>

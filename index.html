@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printer Settings — Quick Reference for Every Filament | 3DCheat</title>
+    <meta name="description" content="Free 3D printer settings reference for Bambu Lab, Creality, Prusa, and Elegoo printers. Recommended temperatures, speeds, retraction, and bed settings for PLA, PETG, ABS, TPU and more.">
+    <meta name="keywords" content="3d printer settings, bambu lab a1 settings, creality ender 3 settings, prusa mk4 settings, elegoo neptune settings, 3d printing filament settings, cura settings, best cura profile, 3d printing for beginners, fdm 3d printing, 3d printer filament">
+    <link rel="canonical" href="https://3dcheat.com/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0B0D11;
+            --surface: #141720;
+            --surface-2: #1C2030;
+            --text: #E8E9ED;
+            --text-soft: #8B8FA3;
+            --text-muted: #565B70;
+            --accent: #6C5CE7;
+            --accent-glow: rgba(108,92,231,0.15);
+            --green: #00D68F;
+            --orange: #FDAC42;
+            --red: #FF6B6B;
+            --border: #222638;
+            --border-hover: #363C54;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle grid pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(108,92,231,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(108,92,231,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav, .hero, .printers, .info-section, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* NAV */
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 32px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        nav .brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        nav .brand .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green);
+        }
+        nav .nav-links { display: flex; gap: 28px; align-items: center; }
+        nav .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-soft);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        nav .nav-link:hover { color: var(--text); }
+        nav .nav-link.active { color: var(--accent); }
+
+        /* HERO */
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 32px 48px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(108,92,231,0.25);
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+        }
+        .hero h1 {
+            font-size: clamp(36px, 5.5vw, 64px);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero p {
+            font-size: 17px;
+            color: var(--text-soft);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* PRINTERS GRID */
+        .printers {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 32px 64px;
+        }
+        .printers-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .printers-header h2 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+        .printers-header .count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .printer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .printer-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 28px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .printer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .printer-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px -12px rgba(0,0,0,0.5);
+        }
+        .printer-card:hover::before { opacity: 1; }
+
+        .printer-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .printer-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+        .printer-desc {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .printer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        .printer-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+        }
+        .printer-arrow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .printer-arrow::after {
+            content: '→';
+            transition: transform 0.2s;
+        }
+        .printer-card:hover .printer-arrow::after {
+            transform: translateX(4px);
+        }
+
+        /* FEATURES */
+        .features {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px 64px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .feat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        .feat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        .feat-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .feat-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* INFO */
+        .info-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px 64px;
+        }
+        .info-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px;
+        }
+        .info-card h2 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+        .info-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+        }
+        .info-card p {
+            font-size: 15px;
+            color: var(--text-soft);
+            line-height: 1.75;
+            margin-bottom: 14px;
+        }
+
+        .faq-item summary {
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 16px 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        .faq-item[open] summary { border-bottom-color: var(--accent); }
+        .faq-item summary::-webkit-details-summary { display: none; }
+        .faq-item summary::before {
+            content: '+';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px; height: 22px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            border-radius: 6px;
+        }
+        .faq-item[open] summary::before {
+            content: '−';
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .faq-item .faq-answer {
+            padding: 12px 0 16px 34px;
+            color: var(--text-soft);
+            font-size: 14px;
+            line-height: 1.7;
+            border-bottom: 1px solid var(--border);
+        }
+
+        footer {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        footer a { color: var(--text-muted); text-decoration: none; margin: 0 12px; }
+        footer a:hover { color: var(--accent); }
+
+        @media (max-width: 900px) {
+            .printer-grid { grid-template-columns: 1fr 1fr; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .printer-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .info-card { padding: 28px; }
+            .hero h1 { font-size: 32px; letter-spacing: -1px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="brand"><span class="dot"></span> 3DCheat</a>
+    <div class="nav-links">
+        <a href="/" class="nav-link active">Printers</a>
+        <a href="/about.html" class="nav-link">About</a>
+        <a href="/contact.html" class="nav-link">Contact</a>
+        <a href="/privacy.html" class="nav-link">Privacy</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-badge">Free Reference · Updated 2026</div>
+    <h1>3D printer <span class="accent">settings</span> for every filament</h1>
+    <p>Recommended temperatures, speeds, retraction, and bed settings for the most popular FDM 3D printers. Pick your printer, pick your filament, start printing.</p>
+</section>
+
+<section class="printers">
+    <div class="printers-header">
+        <h2>Choose Your Printer</h2>
+        <span class="count">6 printers</span>
+    </div>
+    <div class="printer-grid">
+
+        <a href="/bambu-lab-a1.html" class="printer-card">
+            <div class="printer-brand">Bambu Lab</div>
+            <div class="printer-name">A1</div>
+            <div class="printer-desc">Bambu's open-frame speed demon. Auto bed levelling, direct drive, and blistering fast print speeds out of the box.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Direct Drive</span>
+                <span class="printer-tag">Auto Level</span>
+                <span class="printer-tag">Fast</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+        <a href="/bambu-lab-p1s.html" class="printer-card">
+            <div class="printer-brand">Bambu Lab</div>
+            <div class="printer-name">P1S</div>
+            <div class="printer-desc">Enclosed, fast, and reliable. Handles ABS, ASA, and Nylon with ease. One of the best all-round printers available.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Enclosed</span>
+                <span class="printer-tag">Direct Drive</span>
+                <span class="printer-tag">AMS Ready</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+        <a href="/prusa-mk4.html" class="printer-card">
+            <div class="printer-brand">Prusa</div>
+            <div class="printer-name">MK4 / MK4S</div>
+            <div class="printer-desc">The gold standard for reliability. Nextruder direct drive, input shaping, and legendary community support.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Direct Drive</span>
+                <span class="printer-tag">Open Source</span>
+                <span class="printer-tag">PrusaSlicer</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+        <a href="/ender-3-v2.html" class="printer-card">
+            <div class="printer-brand">Creality</div>
+            <div class="printer-name">Ender 3 V2</div>
+            <div class="printer-desc">The world's most popular budget printer. Bowden setup, huge community, and endlessly moddable.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Bowden</span>
+                <span class="printer-tag">Budget</span>
+                <span class="printer-tag">Moddable</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+        <a href="/ender-3-v3-se.html" class="printer-card">
+            <div class="printer-brand">Creality</div>
+            <div class="printer-name">Ender 3 V3 SE</div>
+            <div class="printer-desc">Creality's updated budget king. Direct drive extruder, auto bed levelling, and CR Touch out of the box.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Direct Drive</span>
+                <span class="printer-tag">Auto Level</span>
+                <span class="printer-tag">Budget</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+        <a href="/elegoo-neptune-4.html" class="printer-card">
+            <div class="printer-brand">Elegoo</div>
+            <div class="printer-name">Neptune 4</div>
+            <div class="printer-desc">Fast Klipper-based printer with direct drive. Excellent value with speeds up to 500mm/s and auto levelling.</div>
+            <div class="printer-tags">
+                <span class="printer-tag">Klipper</span>
+                <span class="printer-tag">Direct Drive</span>
+                <span class="printer-tag">Fast</span>
+            </div>
+            <div class="printer-arrow">View settings</div>
+        </a>
+
+    </div>
+</section>
+
+<section class="features">
+    <div class="features-grid">
+        <div class="feat-card">
+            <div class="feat-icon">🎯</div>
+            <h3>Tested Settings</h3>
+            <p>Based on community testing and manufacturer recommendations for each printer.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">🔄</div>
+            <h3>9 Filament Types</h3>
+            <p>PLA, PLA+, PETG, ABS, TPU, ASA, Nylon, Wood, and Silk PLA covered.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">⚡</div>
+            <h3>Instant Lookup</h3>
+            <p>Click your filament, see all settings at once. No scrolling through forum posts.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">🖨️</div>
+            <h3>Any Slicer</h3>
+            <p>Settings work in Cura, PrusaSlicer, OrcaSlicer, Bambu Studio, and more.</p>
+        </div>
+    </div>
+</section>
+
+<section class="info-section">
+    <div class="info-card">
+        <h2>3D Printer Settings — A Beginner's Guide</h2>
+        <p>Every 3D printer needs the right settings for each filament type to produce good prints. The three most important settings are nozzle temperature, bed temperature, and print speed. Get these right and you'll avoid 90% of common printing problems like stringing, warping, poor adhesion, and layer separation.</p>
+
+        <h3>What settings matter most?</h3>
+        <p><strong>Nozzle temperature</strong> determines how well the filament melts and bonds. Too low and layers won't stick. Too high and you get stringing, oozing, and poor detail. Each filament type has a sweet spot — PLA around 200-210°C, PETG around 230-240°C, ABS around 240-250°C.</p>
+        <p><strong>Bed temperature</strong> keeps the first layer stuck down. PLA needs 50-60°C, PETG needs 70-80°C, and ABS needs 100-110°C. Wrong bed temperature is the number one cause of prints lifting and warping.</p>
+        <p><strong>Print speed</strong> affects both quality and time. Slower is generally better quality. Start at the recommended speed and increase gradually until you see quality drop, then back off 10%.</p>
+
+        <h3>Why do different printers need different settings?</h3>
+        <p>A Bowden tube printer (like the Ender 3 V2) needs longer retraction distances (5-7mm) because the filament path is longer. A direct drive printer (like the Bambu Lab A1 or Prusa MK4) can use much shorter retraction (0.5-2mm) because the extruder sits directly on the print head. Enclosed printers (like the P1S) can print ABS and Nylon more reliably because they maintain a stable temperature around the print.</p>
+
+        <h2 style="margin-top:36px;">Frequently Asked Questions</h2>
+
+        <details class="faq-item">
+            <summary>What are the best settings for PLA on any 3D printer?</summary>
+            <div class="faq-answer">For PLA on most printers: nozzle temperature 200-210°C, bed temperature 55-60°C, print speed 50-60mm/s, and a cooling fan at 100%. PLA is the easiest filament to print — if you're getting bad results with PLA, it's almost always a bed levelling issue rather than a settings issue.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>What's the best 3D printer for beginners?</summary>
+            <div class="faq-answer">In 2026, the Bambu Lab A1 is the best all-round beginner printer — fast, reliable, and requires almost no setup. The Creality Ender 3 V3 SE is the best budget option with auto levelling. The Prusa MK4 is the most reliable if you want something that just works with minimal tweaking. All three have excellent community support.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>How much does a 3D printer cost?</summary>
+            <div class="faq-answer">Budget FDM printers (Ender 3 V2, Neptune 4) cost £150-250. Mid-range printers (Bambu Lab A1, Prusa MK4) cost £300-500. High-end enclosed printers (Bambu Lab P1S, Prusa XL) cost £600-1500. A roll of filament costs £15-30 and lasts for many prints. The total cost of entry for a decent setup including filament, tools, and a printer is around £200-400.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>What 3D printing filament should I start with?</summary>
+            <div class="faq-answer">Start with PLA. It's the easiest filament to print — low temperature, no warping, no enclosure needed, and it comes in every colour imaginable. Once you're comfortable with PLA, move to PETG for stronger parts, then ABS or ASA if you need heat resistance. TPU is great for flexible parts but harder to print on Bowden setups.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>What's the difference between direct drive and Bowden?</summary>
+            <div class="faq-answer">In a Bowden setup, the extruder motor sits on the frame and pushes filament through a long tube to the print head. In direct drive, the motor sits directly on the print head. Direct drive gives better retraction control (less stringing), handles flexible filaments better, and is generally more reliable. Bowden is lighter, allowing faster movements, but requires more retraction distance and struggles with TPU.</div>
+        </details>
+
+        <details class="faq-item">
+            <summary>How do I fix stringing on my 3D prints?</summary>
+            <div class="faq-answer">Stringing (thin spider-web strands between parts) is caused by molten filament leaking during travel moves. Fix it by: increasing retraction distance (+1mm for Bowden, +0.5mm for direct drive), lowering nozzle temperature by 5°C, enabling "wipe" in your slicer, or drying your filament if it's been out for weeks. PETG strings more than PLA — that's normal and can be minimised but not eliminated.</div>
+        </details>
+    </div>
+</section>
+
+<footer>
+    <div style="margin-bottom: 12px;">
+        <a href="/">Printers</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy</a>
+    </div>
+    &copy; 2026 3DCheat. Not affiliated with any printer manufacturer.
+</footer>
+
+</body>
+</html>
